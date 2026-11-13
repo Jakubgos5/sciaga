@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ściąga z komend: 8 języków</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Fira+Code:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#eef2f1;--panel:#fff;--ink:#16302b;--mute:#52675f;--line:#cfdad6;--code:#0f2a26;--codeink:#d8f3e9;--acc:#0f7b6c;--accsoft:#d4ece6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1917;--panel:#14241f;--ink:#e3f1ec;--mute:#93aaa2;--line:#25403a;--code:#07110f;--codeink:#c9efe1;--acc:#4fd1b8;--accsoft:#1c3a33}}
+:root[data-theme="dark"]{--bg:#0d1917;--panel:#14241f;--ink:#e3f1ec;--mute:#93aaa2;--line:#25403a;--code:#07110f;--codeink:#c9efe1;--acc:#4fd1b8;--accsoft:#1c3a33}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Source Sans 3",system-ui,sans-serif}
+header{max-width:1000px;margin:0 auto;padding:36px 20px 8px}
+h1{font:700 clamp(30px,6vw,52px)/1.05 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 10px;letter-spacing:-.02em}
+header p{margin:0;color:var(--mute);max-width:60ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:18px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.bar div{max-width:1000px;margin:0 auto;padding:10px 20px;display:flex;gap:8px;overflow-x:auto}
+.bar button{flex:none;font:600 15px "Source Sans 3",sans-serif;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.bar button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+main{max-width:1000px;margin:0 auto;padding:20px}
+.search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit;margin-bottom:8px}
+h2{font:700 28px "Bricolage Grotesque",sans-serif;margin:28px 0 4px}
+.intro{color:var(--mute);margin:0 0 14px}
+article{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:0 0 14px;overflow:hidden}
+.wrap{position:relative}
+.code{background:var(--code);color:var(--codeink);margin:0;padding:14px 76px 14px 16px;font:400 15px/1.55 "Fira Code",ui-monospace,monospace;white-space:pre;overflow-x:auto}
+.copy{position:absolute;top:8px;right:8px;font:600 13px "Source Sans 3",sans-serif;padding:4px 10px;border-radius:6px;border:1px solid #3b6159;background:transparent;color:var(--codeink);cursor:pointer}
+.txt{padding:12px 16px 14px}
+.tr{display:inline-block;background:var(--accsoft);color:var(--ink);font-weight:600;font-size:15px;padding:2px 10px;border-radius:6px;margin-bottom:6px}
+.txt p{margin:0}
+.empty{color:var(--mute);padding:24px 0}
+footer{max-width:1000px;margin:0 auto;padding:10px 20px 40px;color:var(--mute);font-size:15px}
+</style>
+</head>
+<body>
+<header>
+<h1>Ściąga z komend programistycznych</h1>
+<p>Podstawowe polecenia z ośmiu języków: Python, C++, C#, JavaScript, Haskell, Java, HTML i CSS. Każde ma tłumaczenie nazwy i opis, co robi.</p>
+</header>
+<nav class="bar" aria-label="Języki"><div id="tabs"></div></nav>
+<main>
+<input id="q" class="search" type="search" placeholder="Szukaj w tym języku, np. pętla, wypisz, lista…" aria-label="Szukaj">
+<h2 id="title"></h2>
+<p class="intro" id="intro"></p>
+<section id="list"></section>
+</main>
+<footer>Kliknij „Kopiuj”, aby skopiować przykład. Przykłady są uproszczone i służą do nauki.</footer>
+<script>
+var L=[
+{n:"Python",i:"Język interpretowany, czytelny, bez nawiasów klamrowych. Bloki kodu wyznaczają wcięcia.",c:[
+['print("Cześć!")','print = „drukuj”','Wypisuje tekst lub wartość na ekranie.'],
+['x = 5','przypisanie','Tworzy zmienną x i zapisuje w niej liczbę 5. Typ ustala się automatycznie.'],
+['if x > 3:\n    print("duże")\nelse:\n    print("małe")','if = „jeśli”, else = „w przeciwnym razie”','Warunek: wykonuje jeden z dwóch bloków w zależności od tego, czy x jest większe od 3.'],
+['for i in range(5):\n    print(i)','for = „dla”, range = „zakres”','Pętla wykonana 5 razy; i przyjmuje wartości 0, 1, 2, 3, 4.'],
+['def dodaj(a, b):\n    return a + b','def = „zdefiniuj”, return = „zwróć”','Tworzy funkcję, która przyjmuje dwa argumenty i zwraca ich sumę.'],
+['lista = [1, 2, 3]\nlen(lista)','len = „długość”','Tworzy listę i zwraca liczbę jej elementów (tu 3).'],
+['imie = input("Imię: ")','input = „wejście”','Pyta użytkownika o tekst i zapisuje odpowiedź w zmiennej.'],
+['import math','import = „importuj”','Dołącza moduł (bibliotekę) math z funkcjami matematycznymi.']]},
+{n:"C++",i:"Język kompilowany, szybki, blisko sprzętu. Instrukcje kończy się średnikiem.",c:[
+['#include <iostream>','include = „dołącz”','Dołącza bibliotekę wejścia i wyjścia, potrzebną do cout i cin.'],
+['int main() {\n    return 0;\n}','main = „główna”, return = „zwróć”','Punkt startowy programu. Zwrócone 0 oznacza, że program zakończył się poprawnie.'],
+['std::cout << "Cześć!" << std::endl;','cout = „wyjście konsoli”, endl = „koniec linii”','Wypisuje tekst na ekran i przechodzi do nowej linii.'],
+['int x = 5;','int = „liczba całkowita”','Deklaruje zmienną typu całkowitego i nadaje jej wartość 5.'],
+['if (x > 3) {\n    std::cout << "duże";\n}','if = „jeśli”','Wykonuje blok tylko wtedy, gdy warunek jest prawdziwy.'],
+['for (int i = 0; i < 5; i++) {\n    std::cout << i;\n}','for = „dla”','Pętla: start i = 0, warunek i < 5, po każdym obiegu i rośnie o 1.'],
+['std::vector<int> v = {1, 2, 3};\nv.push_back(4);','vector = „wektor”, push_back = „dodaj na koniec”','Dynamiczna tablica liczb; push_back dopisuje element na końcu.'],
+['std::cin >> x;','cin = „wejście konsoli”','Wczytuje wartość wpisaną przez użytkownika do zmiennej x.']]},
+{n:"C#",i:"Język firmy Microsoft, działa na platformie .NET. Używany w aplikacjach, grach (Unity) i usługach.",c:[
+['using System;','using = „używając”','Udostępnia przestrzeń nazw System, dzięki czemu można pisać Console zamiast System.Console.'],
+['Console.WriteLine("Cześć!");','WriteLine = „napisz linię”','Wypisuje tekst w konsoli i przechodzi do nowej linii.'],
+['string imie = Console.ReadLine();','ReadLine = „czytaj linię”','Wczytuje linię tekstu wpisaną przez użytkownika.'],
+['int x = 5;\nvar y = 2.5;','var = „zmienna (typ z kontekstu)”','int to liczba całkowita; var pozwala kompilatorowi samemu wybrać typ.'],
+['if (x > 3) {\n    Console.WriteLine("duże");\n}','if = „jeśli”','Wykonuje blok, gdy warunek jest spełniony.'],
+['foreach (var e in lista) {\n    Console.WriteLine(e);\n}','foreach = „dla każdego”','Przechodzi po wszystkich elementach kolekcji, po jednym na obieg.'],
+['List<int> l = new List<int>();\nl.Add(7);','List = „lista”, Add = „dodaj”','Tworzy listę liczb i dodaje do niej element 7.'],
+['static int Dodaj(int a, int b) => a + b;','static = „statyczna”, => = „daje”','Krótka funkcja zwracająca sumę dwóch liczb.']]},
+{n:"JavaScript",i:"Język przeglądarek. Pozwala ożywić stronę: reagować na kliknięcia i zmieniać treść.",c:[
+['console.log("Cześć!");','log = „zapisz do dziennika”','Wypisuje wartość w konsoli przeglądarki (F12).'],
+['let x = 5;\nconst PI = 3.14;','let = „niech”, const = „stała”','let tworzy zmienną, którą można zmieniać; const tworzy wartość stałą.'],
+['if (x > 3) {\n  console.log("duże");\n} else {\n  console.log("małe");\n}','if / else = „jeśli / w przeciwnym razie”','Wykonuje jedną z dwóch gałęzi w zależności od warunku.'],
+['for (let i = 0; i < 5; i++) {\n  console.log(i);\n}','for = „dla”','Klasyczna pętla licząca od 0 do 4.'],
+['const dodaj = (a, b) => a + b;','=> = „strzałka”','Funkcja strzałkowa: przyjmuje a i b, zwraca ich sumę.'],
+['const t = [1, 2, 3].map(n => n * 2);','map = „mapuj”','Tworzy nową tablicę, w której każdy element został pomnożony przez 2: [2, 4, 6].'],
+['document.getElementById("tytul").textContent = "Nowy";','getElementById = „pobierz element po id”','Znajduje element strony o danym id i zmienia jego tekst.'],
+['przycisk.addEventListener("click", () => alert("Hej!"));','addEventListener = „dodaj nasłuchiwanie zdarzenia”','Wywołuje funkcję za każdym razem, gdy ktoś kliknie przycisk.']]},
+{n:"Haskell",i:"Język czysto funkcyjny. Programy składają się z funkcji i wyrażeń, a nie z kolejnych poleceń zmieniających stan.",c:[
+['main = putStrLn "Cześć!"','putStrLn = „wypisz linię tekstu”','Punkt startowy programu. Wypisuje tekst i przechodzi do nowej linii.'],
+['x = 5','definicja','Nie jest to przypisanie. Mówi, że x oznacza 5, i tej wartości nie da się później zmienić.'],
+['dodaj a b = a + b','definicja funkcji','Funkcja dwóch argumentów zapisana bez nawiasów. Wywołanie: dodaj 2 3 daje 5.'],
+['if x > 3 then "duże" else "małe"','if/then/else = „jeśli/to/w przeciwnym razie”','Wyrażenie warunkowe, które zawsze zwraca wartość, więc else jest obowiązkowe.'],
+['map (*2) [1, 2, 3]','map = „mapuj”','Stosuje funkcję „pomnóż przez 2” do każdego elementu listy. Wynik: [2,4,6].'],
+['filter even [1..10]','filter = „filtruj”, even = „parzysta”','Zostawia z listy 1–10 tylko liczby parzyste: [2,4,6,8,10].'],
+['data Kolor = Czerwony | Zielony | Niebieski','data = „dane”','Definiuje własny typ, który może przyjąć jedną z trzech wymienionych wartości.'],
+['main = do\n  imie <- getLine\n  putStrLn ("Cześć, " ++ imie)','do = „wykonaj”, getLine = „pobierz linię”','Blok do łączy kilka czynności wejścia i wyjścia. ++ skleja teksty.']]},
+{n:"Java",i:"Język obiektowy, kompilowany do bajtkodu i uruchamiany na maszynie wirtualnej (JVM). Cały kod mieści się w klasach.",c:[
+['public static void main(String[] args) {\n}','main = „główna”, void = „nic nie zwraca”','Punkt startowy programu. Od tej metody Java zaczyna wykonywanie.'],
+['System.out.println("Cześć!");','println = „drukuj linię”','Wypisuje tekst na ekran i przechodzi do nowej linii.'],
+['int x = 5;\nString s = "tekst";','int = „liczba całkowita”, String = „napis”','Deklaruje zmienne. Java wymaga podania typu każdej z nich.'],
+['if (x > 3) {\n    System.out.println("duże");\n}','if = „jeśli”','Wykonuje blok, jeśli warunek jest prawdziwy.'],
+['for (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}','for = „dla”','Pętla licząca od 0 do 4.'],
+['ArrayList<Integer> l = new ArrayList<>();\nl.add(7);','ArrayList = „lista tablicowa”, add = „dodaj”','Tworzy rozszerzalną listę liczb i dodaje do niej 7.'],
+['class Osoba {\n    String imie;\n}','class = „klasa”','Szablon obiektu. Z klasy Osoba można tworzyć wiele osób, każda z własnym imieniem.'],
+['Scanner sc = new Scanner(System.in);\nint n = sc.nextInt();','Scanner = „skaner”, nextInt = „następna liczba”','Wczytuje liczbę całkowitą wpisaną przez użytkownika.']]},
+{n:"HTML",i:"Język znaczników, który opisuje strukturę strony. Nie jest językiem programowania: mówi, czym jest dany fragment treści.",c:[
+['<h1>Tytuł</h1>','h1 = „nagłówek pierwszego poziomu”','Największy nagłówek na stronie. Są też h2 do h6, coraz mniejsze.'],
+['<p>Akapit tekstu.</p>','p = „akapit” (paragraph)','Zwykły blok tekstu.'],
+['<a href="https://example.com">Link</a>','a = „kotwica”, href = „adres docelowy”','Tworzy odnośnik, który po kliknięciu przenosi pod wskazany adres.'],
+['<img src="foto.jpg" alt="Opis zdjęcia">','img = „obraz”, src = „źródło”, alt = „tekst zastępczy”','Wstawia obrazek. Atrybut alt pomaga osobom niewidomym i pokazuje się, gdy plik się nie wczyta.'],
+['<ul>\n  <li>Jabłko</li>\n  <li>Gruszka</li>\n</ul>','ul = „lista punktowana”, li = „element listy”','Tworzy listę z punktorami. Dla listy numerowanej użyj ol.'],
+['<div class="karta">…</div>','div = „dział”','Neutralny kontener do grupowania elementów, zwykle po to, by nadać im styl w CSS.'],
+['<button>Kliknij</button>','button = „przycisk”','Wstawia przycisk, któremu można przypisać działanie w JavaScripcie.'],
+['<input type="text" placeholder="Imię">','input = „pole wejściowe”, placeholder = „podpowiedź”','Pole, w które użytkownik wpisuje tekst. Szara podpowiedź znika po rozpoczęciu pisania.']]},
+{n:"CSS",i:"Język stylów. Określa, jak wygląda HTML: kolory, rozmiary, odstępy i układ elementów.",c:[
+['p { color: red; }','color = „kolor tekstu”','Ustawia czerwony kolor tekstu we wszystkich akapitach.'],
+['body { background-color: #eef2f1; }','background-color = „kolor tła”','Ustawia kolor tła strony. Kolor można podać nazwą, kodem hex lub rgb().'],
+['.karta { margin: 20px; padding: 10px; }','margin = „margines zewnętrzny”, padding = „margines wewnętrzny”','margin odsuwa element od sąsiadów, padding odsuwa jego treść od krawędzi.'],
+['.rzad { display: flex; gap: 10px; }','display: flex = „wyświetlaj elastycznie”, gap = „odstęp”','Ustawia dzieci elementu w jednym rzędzie z odstępem 10 px między nimi.'],
+['h1 { font-size: 32px; }','font-size = „rozmiar czcionki”','Zmienia wielkość tekstu. Można używać px, em lub rem.'],
+['.przycisk { border-radius: 8px; }','border-radius = „promień obramowania”','Zaokrągla rogi elementu.'],
+['a:hover { color: blue; }','hover = „najechanie”','Styl stosowany tylko wtedy, gdy kursor znajduje się nad elementem.'],
+['@media (max-width: 600px) {\n  body { font-size: 15px; }\n}','media = „nośnik”, max-width = „maksymalna szerokość”','Reguły działają tylko na wąskich ekranach, np. telefonach. Tak powstaje strona responsywna.']]}
+];
+var X=[[
+['x = int("5")','int = „liczba całkowita”','Zamienia tekst "5" na liczbę 5. Podobnie działają float() i str().'],
+['while x < 10:\n    x += 1','while = „dopóki”','Powtarza blok, dopóki warunek jest prawdziwy.'],
+['d = {"a": 1}\nd["b"] = 2','dict = „słownik”','Przechowuje pary klucz–wartość. Druga linia dodaje nowy klucz.'],
+['lista.append(4)','append = „dołącz”','Dodaje element na koniec listy.'],
+['try:\n    1/0\nexcept ZeroDivisionError:\n    print("błąd")','try/except = „spróbuj/wyłap”','Przechwytuje błąd, żeby program się nie zatrzymał.'],
+['with open("a.txt") as f:\n    t = f.read()','open = „otwórz”, read = „czytaj”','Otwiera plik, czyta go i sam zamyka po wyjściu z bloku.'],
+['class Pies:\n    def szczekaj(self):\n        print("Hau")','class = „klasa”, self = „ja sam”','Szablon obiektu z metodą. self oznacza konkretny obiekt.'],
+['[n*n for n in range(5)]','lista składana','Krótko tworzy listę kwadratów: [0,1,4,9,16].'],
+['f"Cześć {imie}"','f-string = „napis formatowany”','Wstawia wartość zmiennej w środek tekstu.'],
+['sorted([3, 1, 2])','sorted = „posortowane”','Zwraca nową listę posortowaną rosnąco: [1,2,3].']
+],[
+['while (x < 10) x++;','while = „dopóki”','Powtarza instrukcję, dopóki warunek jest prawdziwy.'],
+['std::string s = "Ala";','string = „napis”','Typ tekstowy z wieloma wygodnymi metodami, np. s.size().'],
+['double pi = 3.14;','double = „podwójna precyzja”','Liczba z częścią ułamkową.'],
+['int* p = &x;','* = wskaźnik, & = „adres”','Wskaźnik p przechowuje adres zmiennej x w pamięci.'],
+['void powitaj() {\n    std::cout << "Hej";\n}','void = „pusty”','Funkcja, która nic nie zwraca.'],
+['class Pies {\npublic:\n    void szczekaj() {}\n};','class = „klasa”, public = „publiczne”','Szablon obiektu. public oznacza, że członkowie są dostępni z zewnątrz.'],
+['switch (x) {\n    case 1: break;\n    default: break;\n}','switch = „przełącznik”','Wybiera blok na podstawie wartości x. break kończy wybrany przypadek.'],
+['try { throw 1; } catch (int e) { }','throw = „rzuć”, catch = „złap”','Obsługa wyjątków: throw zgłasza błąd, catch go przechwytuje.'],
+['std::sort(v.begin(), v.end());','sort = „sortuj”','Sortuje wektor rosnąco. Wymaga #include <algorithm>.'],
+['const int N = 10;','const = „stała”','Wartość, której nie można zmienić po ustawieniu.']
+],[
+['while (x < 10) x++;','while = „dopóki”','Powtarza instrukcję, dopóki warunek jest prawdziwy.'],
+['string s = $"Cześć {imie}";','$ = interpolacja napisu','Wstawia wartość zmiennej w środek tekstu.'],
+['double d = 3.14;','double = „liczba zmiennoprzecinkowa”','Liczba z częścią ułamkową.'],
+['int n = int.Parse("5");','Parse = „przetwórz”','Zamienia tekst na liczbę całkowitą.'],
+['try { } catch (Exception e) { }','try/catch = „spróbuj/złap”','Przechwytuje wyjątki zamiast przerywać program.'],
+['class Pies {\n    public void Szczekaj() { }\n}','class = „klasa”','Szablon obiektu z metodą Szczekaj.'],
+['switch (x) {\n    case 1: break;\n}','switch = „przełącznik”','Wybiera blok kodu zależnie od wartości x.'],
+['var d = new Dictionary<string, int>();','Dictionary = „słownik”','Kolekcja par klucz–wartość.'],
+['lista.Where(n => n > 2)','Where = „gdzie” (LINQ)','Wybiera z kolekcji tylko elementy spełniające warunek.'],
+['File.ReadAllText("a.txt");','ReadAllText = „czytaj cały tekst”','Wczytuje cały plik tekstowy do jednego napisu.']
+],[
+['while (x < 10) { x++; }','while = „dopóki”','Powtarza blok, dopóki warunek jest prawdziwy.'],
+['const o = { imie: "Ala", wiek: 7 };','obiekt','Grupuje powiązane wartości pod nazwami: o.imie daje "Ala".'],
+['[1, 2, 3].filter(n => n > 1)','filter = „filtruj”','Zwraca nową tablicę z elementami większymi od 1: [2, 3].'],
+['`Cześć ${imie}`','szablon tekstowy','W odwrotnych apostrofach można wstawiać zmienne przez ${...}.'],
+['setTimeout(() => alert("Hej"), 1000);','setTimeout = „ustaw odliczanie”','Wykonuje funkcję po 1000 ms (1 sekundzie).'],
+['fetch("/dane").then(r => r.json())','fetch = „pobierz”','Pobiera dane z serwera, a then obsługuje odpowiedź, gdy dotrze.'],
+['try { } catch (e) { }','try/catch = „spróbuj/złap”','Przechwytuje błędy, żeby skrypt się nie zatrzymał.'],
+['typeof x','typeof = „typ czego”','Zwraca nazwę typu wartości, np. "number" lub "string".'],
+['class Pies {\n  szczekaj() { }\n}','class = „klasa”','Szablon obiektów z metodami.'],
+['JSON.stringify(obiekt)','stringify = „zamień na napis”','Zamienia obiekt na tekst w formacie JSON, np. do wysłania na serwer.']
+],[
+['length [1, 2, 3]','length = „długość”','Zwraca liczbę elementów listy: 3.'],
+['head [1, 2, 3]\ntail [1, 2, 3]','head = „głowa”, tail = „ogon”','head to pierwszy element (1), tail to reszta ([2,3]).'],
+['zip [1, 2] "ab"','zip = „zapnij”','Paruje elementy dwóch list: [(1,\'a\'),(2,\'b\')].'],
+['foldr (+) 0 [1, 2, 3]','foldr = „zwiń od prawej”','Łączy elementy listy jedną operacją, tu sumuje je: 6.'],
+['let kw x = x * x in kw 4','let/in = „niech/w”','Definiuje lokalną funkcję i od razu jej używa. Wynik: 16.'],
+['case x of\n  0 -> "zero"\n  _ -> "inne"','case/of = „przypadek/z”','Dopasowanie wzorca: _ pasuje do każdej innej wartości.'],
+['sum [1..10]','sum = „suma”, [1..10] = zakres','Sumuje liczby od 1 do 10: 55.'],
+['suma [] = 0\nsuma (x:xs) = x + suma xs','rekurencja','Suma pustej listy to 0, a suma listy to pierwszy element plus suma reszty.'],
+['[n * n | n <- [1..5]]','lista składana','Tworzy listę kwadratów: [1,4,9,16,25].'],
+['Just 5\nNothing','Maybe = „może”','Typ na wartość, która może nie istnieć: Just 5 to wartość, Nothing to brak.']
+],[
+['while (x < 10) { x++; }','while = „dopóki”','Powtarza blok, dopóki warunek jest prawdziwy.'],
+['double d = 3.14;\nboolean ok = true;','double = „liczba z ułamkiem”, boolean = „prawda/fałsz”','Podstawowe typy proste.'],
+['String s = "Ala";\ns.length();','length = „długość”','Zwraca liczbę znaków napisu: 3.'],
+['int[] t = {1, 2, 3};','tablica','Tablica o stałym rozmiarze, indeksowana od 0: t[0] to 1.'],
+['switch (x) {\n    case 1: break;\n}','switch = „przełącznik”','Wybiera blok kodu zależnie od wartości x.'],
+['try { } catch (Exception e) { }','try/catch = „spróbuj/złap”','Przechwytuje wyjątki zamiast przerywać program.'],
+['public int dodaj(int a, int b) {\n    return a + b;\n}','public = „publiczna”, return = „zwróć”','Metoda zwracająca sumę dwóch liczb.'],
+['HashMap<String, Integer> m = new HashMap<>();\nm.put("a", 1);','HashMap = „mapa haszująca”, put = „połóż”','Słownik par klucz–wartość; put dodaje parę.'],
+['Math.sqrt(16)','sqrt = „pierwiastek”','Zwraca pierwiastek kwadratowy: 4.0.'],
+['for (int n : t) { }','pętla for-each','Przechodzi po każdym elemencie tablicy lub kolekcji.']
+],[
+['linia 1<br>linia 2','br = „złamanie linii” (break)','Wymusza przejście do nowej linii wewnątrz tekstu.'],
+['<table>\n  <tr><td>A</td><td>B</td></tr>\n</table>','table = „tabela”, tr = „wiersz”, td = „komórka”','Tworzy tabelę z jednym wierszem i dwiema komórkami.'],
+['<form action="/wyslij" method="post">…</form>','form = „formularz”','Grupuje pola i wysyła ich zawartość pod adres action.'],
+['<label for="imie">Imię</label>','label = „etykieta”','Podpisuje pole o danym id. Kliknięcie etykiety aktywuje pole.'],
+['<meta charset="utf-8">','meta = „metadane”, charset = „zestaw znaków”','Pozwala poprawnie wyświetlać polskie znaki.'],
+['<span>tekst</span>','span = „zakres”','Neutralny element w linii, używany do stylowania fragmentu tekstu.'],
+['<strong>ważne</strong> <em>podkreślone</em>','strong = „mocny”, em = „nacisk”','strong pogrubia, em pochyla tekst i oznacza ich wagę.'],
+['<select>\n  <option>Tak</option>\n</select>','select = „wybór”, option = „opcja”','Tworzy rozwijaną listę wyboru.'],
+['<video controls src="film.mp4"></video>','video = „wideo”, controls = „sterowanie”','Wstawia odtwarzacz filmu z przyciskami.'],
+['<script src="app.js"><\/script>','script = „skrypt”','Dołącza plik JavaScript do strony.']
+],[
+['div { width: 200px; height: 100px; }','width = „szerokość”, height = „wysokość”','Ustawia rozmiar elementu.'],
+['border: 1px solid #ccc;','border = „obramowanie”','Rysuje cienką, ciągłą szarą ramkę.'],
+['font-family: Arial, sans-serif;','font-family = „rodzina czcionek”','Wybiera czcionkę. Kolejne nazwy to zapasowe.'],
+['text-align: center;','text-align = „wyrównanie tekstu”','Wyśrodkowuje tekst. Inne wartości: left, right, justify.'],
+['position: absolute;\ntop: 10px;\nleft: 10px;','position = „położenie”','Umieszcza element w dokładnym miejscu względem rodzica.'],
+['display: grid;\ngrid-template-columns: 1fr 1fr;','grid = „siatka”, fr = „część”','Układa elementy w siatce o dwóch równych kolumnach.'],
+['opacity: 0.5;','opacity = „nieprzezroczystość”','Robi element do połowy przezroczystym (0 to niewidoczny, 1 to pełny).'],
+['transition: all .3s;','transition = „przejście”','Płynnie animuje zmianę stylu przez 0,3 sekundy.'],
+[':root { --kolor: teal; }\na { color: var(--kolor); }','var = „zmienna”','Własna zmienna CSS zdefiniowana raz i używana w wielu miejscach.'],
+['box-shadow: 0 2px 8px rgba(0,0,0,.2);','box-shadow = „cień ramki”','Dodaje miękki cień pod elementem.']
+]];
+X.forEach(function(a,i){a.forEach(function(r){L[i].c.push(r)})});
+var cur=0,tabs=document.getElementById("tabs"),list=document.getElementById("list"),q=document.getElementById("q");
+function mk(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function render(){
+  var d=L[cur],s=q.value.trim().toLowerCase(),n=0;
+  document.getElementById("title").textContent=d.n;
+  document.getElementById("intro").textContent=d.i;
+  list.textContent="";
+  d.c.forEach(function(r){
+    if(s&&(r.join(" ").toLowerCase().indexOf(s)<0))return;
+    n++;
+    var a=mk("article"),pre=mk("pre","code",r[0]),b=mk("button","copy","Kopiuj");
+    b.type="button";
+    b.onclick=function(){
+      var done=function(){b.textContent="Skopiowano";setTimeout(function(){b.textContent="Kopiuj"},1200)};
+      var fb=function(){var x=document.createElement("textarea");x.value=r[0];x.style.position="fixed";x.style.opacity="0";document.body.appendChild(x);x.select();try{document.execCommand("copy");done()}catch(e){b.textContent="Błąd"}document.body.removeChild(x)};
+      try{navigator.clipboard.writeText(r[0]).then(done,fb)}catch(e){fb()}
+    };
+    var w=mk("div","wrap");w.appendChild(pre);w.appendChild(b);
+    var t=mk("div","txt");
+    t.appendChild(mk("div","tr",r[1]));
+    t.appendChild(mk("p",null,r[2]));
+    a.appendChild(w);a.appendChild(t);list.appendChild(a);
+  });
+  if(!n)list.appendChild(mk("p","empty","Brak wyników. Spróbuj innego słowa."));
+}
+L.forEach(function(d,i){
+  var b=mk("button",null,d.n);b.type="button";
+  b.setAttribute("aria-pressed",i===0);
+  b.onclick=function(){
+    cur=i;
+    Array.prototype.forEach.call(tabs.children,function(x,j){x.setAttribute("aria-pressed",j===i)});
+    render();
+  };
+  tabs.appendChild(b);
+});
+q.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
